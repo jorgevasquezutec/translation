@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  middleware:
+    image: jorgevasquezutec/translation-middleware:latest
+    env_file: .middleware.env
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  engine:
+    image: jorgevasquezutec/translation-engine:latest
+    ports:
+      - target: 8000
+        published: 8000
+        mode: host
+    env_file: .engine.env
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
